@@ -61,7 +61,7 @@
                     const usdPrice = (ethPrice * exchangeRate).toFixed(4);
                     let tokenName = token.name;
 
-                    return `${tokenName};${usdPrice};USD`;
+                    return `${tokenName},${usdPrice},USD`;
                 }).join('<br>');
 
                 // Actualizar el DOM con los datos procesados
