@@ -55,19 +55,25 @@
                 const exchangeRate = data2.data.exchangeRate.eth.usd;
                 const tokens = data1.data.erc1155Tokens.results;
 
-                // Procesar los datos
+                // Add headers for the CSV
+                let csvContent = "Token Name,Price (USD),Currency\n";
+                
+                // Process the tokens
                 const tokenRows = tokens.map(token => {
                     const ethPrice = parseFloat(token.minPrice) / 1e18;
                     const usdPrice = (ethPrice * exchangeRate).toFixed(4);
-                    let tokenName = token.name;
+                    const tokenName = token.name;
 
                     return `${tokenName},${usdPrice},USD`;
-                }).join('<br>');
+                }).join('\n');  // Use newline to separate rows
 
-                // Actualizar el DOM con los datos procesados
-                document.getElementById('erc1155Tokens').innerHTML = tokenRows;
+                // Combine headers and rows
+                csvContent += tokenRows;
 
-                // Mostrar la fecha y hora de la última actualización en UTC
+                // Display CSV content in <pre> for formatting
+                document.getElementById('erc1155Tokens').innerHTML = `<pre>${csvContent}</pre>`;
+
+                // Show last updated date and time in UTC
                 const lastUpdated = new Date().toUTCString();
                 document.getElementById('lastUpdated').innerHTML = `${lastUpdated}`;
             }
@@ -81,7 +87,7 @@
     </script>
 </head>
 <body>
-    <div id="erc1155Tokens">Cargando precios de mementos...</div>
+    <div id="erc1155Tokens">Loading...</div>
     <div id="lastUpdated"></div>
 </body>
 </html>
