@@ -55,23 +55,19 @@
                 const exchangeRate = data2.data.exchangeRate.eth.usd;
                 const tokens = data1.data.erc1155Tokens.results;
 
-                // Structure the data in HTML elements for easy parsing with IMPORTXML
+                // Procesar los datos
                 const tokenRows = tokens.map(token => {
                     const ethPrice = parseFloat(token.minPrice) / 1e18;
                     const usdPrice = (ethPrice * exchangeRate).toFixed(4);
                     let tokenName = token.name;
 
-                    // Create a div for each token
-                    return `<div class="token">
-                        <span class="name">${tokenName}</span>
-                        <span class="price">${usdPrice} USD</span>
-                    </div>`;
-                }).join('');
+                    return `${tokenName};${usdPrice};USD`;
+                }).join('<br>');
 
-                // Update the DOM with the structured data
+                // Actualizar el DOM con los datos procesados
                 document.getElementById('erc1155Tokens').innerHTML = tokenRows;
 
-                // Show the last updated time
+                // Mostrar la fecha y hora de la última actualización en UTC
                 const lastUpdated = new Date().toUTCString();
                 document.getElementById('lastUpdated').innerHTML = `${lastUpdated}`;
             }
