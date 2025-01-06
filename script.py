@@ -40,12 +40,48 @@ def update_csv():
         }
     }"""
 
+    queries = [
+        """
+        query MyQuery {
+            erc1155Token(tokenType: Consumable, tokenId: "1") {
+                name
+                minPrice
+            }
+        }""",
+        """
+        query MyQuery {
+            erc1155Token(tokenType: Consumable, tokenId: "2") {
+                name
+                minPrice
+            }
+        }""",
+        """
+        query MyQuery {
+            erc1155Token(tokenType: Consumable, tokenId: "3") {
+                name
+                minPrice
+            }
+        }""",
+        """
+        query MyQuery {
+            erc1155Token(tokenType: Consumable, tokenId: "4") {
+                name
+                minPrice
+            }
+        }"""
+    ]
+
     data1 = fetch_graphql(query1)
     data2 = fetch_graphql(query2)
+    additional_data = [fetch_graphql(query) for query in queries]
 
-    if data1 and data2:
+    if data1 and data2 and all(additional_data):
         exchange_rate = data2['data']['exchangeRate']['eth']['usd']
         tokens = data1['data']['erc1155Tokens']['results']
+
+        for data in additional_data:
+            token = data['data']['erc1155Token']
+            tokens.append(token)
 
         # Prepare CSV content
         csv_content = [["Token Name", "Price (USD)", "Currency"]]
